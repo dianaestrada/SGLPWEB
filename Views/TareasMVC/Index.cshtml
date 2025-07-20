@@ -1,0 +1,74 @@
+﻿@model IEnumerable<SGLPWEB.Models.Tarea>
+
+@if (Model.Any(t => t.EstadoVencimiento == "Por vencer"))
+{
+    <div class="alert alert-warning">
+        ⏳ Tienes @Model.Count(t => t.EstadoVencimiento == "Por vencer") tareas por vencer. ¡Revisar!
+    </div>
+}
+
+@{
+    ViewData["Title"] = "Index";
+
+    var rol = Context.Session.GetString("Rol");
+}
+
+<h1>Tareas</h1>
+
+@if (rol == "Administrador" || rol == "Empleado")
+
+{
+    <a asp-action="Create" class="btn btn-success mb-3">Crear nuevo</a>
+}
+
+<table class="table table-bordered table-striped">
+    <thead class="table-light">
+        <tr>
+            <th>Responsable</th>
+            <th>Descripción</th>
+            <th>Fecha Límite</th>
+            <th>Prioridad</th>
+            <th>Estado</th>
+            <th>Caso</th>
+            <th>Vencimiento</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+
+        {
+            <tr>
+                <td>@item.Responsable?.Nombre</td>
+                <td>@item.Descripcion</td>
+                <td>
+                    @(item.FechaLimite.HasValue ? item.FechaLimite.Value.ToString("dd/MM/yyyy") : "Sin fecha")
+                </td>
+                <td>@item.Prioridad</td>
+                <td>@item.Estado</td>
+                <td>@item.Caso?.TipoCaso</td>
+                <td>
+                    <span class="badge @(item.EstadoVencimiento == "Vencida" ? "bg-danger" : item.EstadoVencimiento == "Por vencer" ? "bg-warning text-dark" : item.EstadoVencimiento == "Finalizada" ? "bg-success" : "bg-secondary")">
+                        @item.EstadoVencimiento
+                    </span>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.TareaId" class="btn btn-sm btn-outline-info">Ver</a>
+
+                    @if (rol == "Administrador" || rol == "Empleado")
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.TareaId" class="btn btn-sm btn-outline-warning">Editar</a>
+                    }
+
+                    @if (rol == "Administrador")
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.TareaId" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a asp-controller="Home" asp-action="Dashboard" class="btn btn-outline-primary">
+    🏠 Volver al panel principal
+</a>

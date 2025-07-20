@@ -1,0 +1,59 @@
+﻿@model IEnumerable<SGLPWEB.Models.Evidencia>
+
+@{
+    ViewData["Title"] = "Index";
+
+    var rol = Context.Session.GetString("Rol");
+}
+
+<h1>Evidencias</h1>
+
+@if (rol == "Administrador" || rol == "Empleado")
+
+{
+    <a asp-action="Create" class="btn btn-success mb-3">Crear nuevo</a>
+}
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.NombreArchivo)</th>
+            <th>@Html.DisplayNameFor(model => model.RutaArchivo)</th>
+            <th>@Html.DisplayNameFor(model => model.FechaSubida)</th>
+            <th>@Html.DisplayNameFor(model => model.Tarea)</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.NombreArchivo)</td>
+                <td>@Html.DisplayFor(modelItem => item.RutaArchivo)</td>
+                <td>@item.FechaSubida.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@item.Tarea?.Descripcion</td>
+                <td>
+                    <div class="btn-group btn-group-sm" role="group">
+                        <a asp-action="Details" asp-route-id="@item.EvidenciaId" class="btn btn-info">Ver</a>
+
+                        @if (rol == "Administrador" || rol == "Empleado")
+
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.EvidenciaId" class="btn btn-warning">Editar</a>
+                        }
+
+                        @if (rol == "Administrador")
+
+                        {
+                            <a asp-action="Delete" asp-route-id="@item.EvidenciaId" class="btn btn-danger">Eliminar</a>
+                        }
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a asp-controller="Home" asp-action="Dashboard" class="btn btn-outline-primary">
+    🏠 Volver al panel principal
+</a>

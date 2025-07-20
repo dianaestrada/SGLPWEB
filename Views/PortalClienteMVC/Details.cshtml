@@ -1,0 +1,101 @@
+﻿@model SGLPWEB.Models.Caso
+
+@{
+    ViewData["Title"] = "Detalle del Caso";
+}
+
+<h2>🗂 Detalle del Caso</h2>
+
+<div class="card mb-3">
+    <div class="card-header bg-secondary text-white">
+        Tipo: @Model.TipoCaso
+    </div>
+    <div class="card-body">
+        <p><strong>Estado:</strong> @Model.Estado</p>
+        <p><strong>Fecha de creación:</strong> @Model.FechaInicio.ToString("dd/MM/yyyy")</p>
+    </div>
+</div>
+
+@if (Model.Tareas?.Any() == true)
+
+{
+    <h4>Tareas asociadas</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Descripción</th>
+                <th>Fecha límite</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tarea in Model.Tareas)
+
+            {
+                <tr>
+                    <td>@tarea.Descripcion</td>
+                    <td>
+                        @(tarea.FechaLimite.HasValue
+                            ? tarea.FechaLimite.Value.ToString("dd/MM/yyyy")
+                            : "Sin fecha")
+                    </td>
+                    <td>
+                        <span class="badge @(tarea.Estado == "Completado" ? "bg-success" : "bg-warning text-dark")">
+                            @tarea.Estado
+                        </span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@if (Model.Plazos?.Any() == true)
+
+{
+    <h4>Plazos vinculados</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Descripción</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var plazo in Model.Plazos)
+
+            {
+                <tr>
+                    <td>@plazo.Descripcion</td>
+                    <td>
+                        @plazo.FechaEvento.ToString("dd/MM/yyyy")
+                    </td>
+                    <td>
+                        <span class="badge @(plazo.EstadoPlazo == "Vencido" ? "bg-danger" : plazo.EstadoPlazo == "Próximo" ? "bg-warning text-dark" : "bg-secondary")">
+                            @plazo.EstadoPlazo
+                        </span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a asp-action="Index" class="btn btn-outline-secondary mt-3">
+        ⬅ Volver a mis casos
+    </a>
+}
+
+@if (Model.Evidencias?.Any() == true)
+
+{
+    <h4>Documentos cargados</h4>
+    <ul class="list-group">
+        @foreach (var ev in Model.Evidencias)
+
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                📄 @ev.NombreArchivo
+                <span class="text-muted">@ev.FechaSubida.ToString("dd/MM/yyyy")</span>
+            </li>
+        }
+    </ul>
+}

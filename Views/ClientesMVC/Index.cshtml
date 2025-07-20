@@ -1,0 +1,77 @@
+﻿@model IEnumerable<SGLPWEB.Models.Cliente>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@{
+    var rol = Context.Session.GetString("Rol");
+}
+
+@if (rol == "Administrador" || rol == "Empleado")
+{
+    <a asp-action="Create" class="btn btn-success mb-3">Crear nuevo</a>
+}
+
+<h1>Clientes</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Correo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Telefono)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UsuarioPortal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClaveHash)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Correo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefono)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UsuarioPortal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClaveHash)
+            </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.ClienteId" class="btn btn-info btn-sm">Ver</a>
+
+                    @if (rol == "Administrador" || rol == "Empleado")
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.ClienteId" class="btn btn-warning btn-sm">Editar</a>
+                    }
+
+                    @if (rol == "Administrador")
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.ClienteId" class="btn btn-danger btn-sm">Eliminar</a>
+                    }
+                </td>
+
+        </tr>
+}
+    </tbody>
+</table>
+<a asp-controller="Home" asp-action="Dashboard" class="btn btn-outline-primary">
+    🏠 Volver al panel principal
+</a>

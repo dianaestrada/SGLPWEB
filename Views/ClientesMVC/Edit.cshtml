@@ -1,0 +1,60 @@
+﻿@model SGLPWEB.Models.Cliente
+
+@{
+    ViewData["Title"] = "Editar Cliente";
+}
+
+<h2>📝 Editar Cliente</h2>
+<p class="text-muted">Actualiza la información registrada</p>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <input type="hidden" asp-for="ClienteId" />
+
+            <div class="form-group mb-3">
+                <label asp-for="Nombre" class="form-label"></label>
+                <input asp-for="Nombre" class="form-control" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Correo" class="form-label"></label>
+                <input asp-for="Correo" type="email" class="form-control" />
+                <span asp-validation-for="Correo" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Telefono" class="form-label"></label>
+                <input asp-for="Telefono" class="form-control" />
+                <span asp-validation-for="Telefono" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="UsuarioPortal" class="form-label"></label>
+                <input asp-for="UsuarioPortal" class="form-control" />
+                <span asp-validation-for="UsuarioPortal" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="ClaveHash" class="form-label"></label>
+                <input asp-for="ClaveHash" type="password" class="form-control" />
+                <span asp-validation-for="ClaveHash" class="text-danger"></span>
+            </div>
+
+            <div class="d-flex gap-2 mt-3">
+                <button type="submit" class="btn btn-primary">💾 Guardar cambios</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">⬅ Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

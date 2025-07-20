@@ -1,0 +1,52 @@
+﻿@model IEnumerable<SGLPWEB.Models.Caso>
+
+@{
+    ViewData["Title"] = "Portal Cliente";
+}
+
+<h2>Bienvenido al portal legal</h2>
+<p class="text-muted">Aquí puedes revisar el estado de tus casos activos.</p>
+
+@{
+    var estadoFiltro = Context.Request.Query["estado"];
+}
+
+@foreach (var caso in Model)
+
+
+
+{
+    <div class="card mb-3">
+        <div class="card-header bg-secondary text-white">
+            🗂 Caso: @caso.TipoCaso
+        </div>
+        <div class="card-body">
+            <div class="btn-group mb-3" role="group">
+                <a asp-action="Index" class="btn btn-outline-secondary">Todos</a>
+                <a asp-action="Index" asp-route-estado="Activo" class="btn btn-outline-success">Activos</a>
+                <a asp-action="Index" asp-route-estado="Finalizado" class="btn btn-outline-dark">Finalizados</a>
+            </div>
+            <p><strong>Estado:</strong> @caso.Estado</p>
+            <p><strong>Fecha de creación:</strong> @caso.FechaInicio.ToString("dd/MM/yyyy")</p>
+
+            @if (caso.Tareas?.Any() == true)
+
+
+
+            {
+                <p><strong>Tareas pendientes:</strong> @caso.Tareas.Count(t => t.Estado != "Completado")</p>
+            }
+
+            @if (caso.Plazos?.Any() == true)
+
+
+
+            {
+                <p><strong>Próximos plazos:</strong> @caso.Plazos.Count(p => p.EstadoPlazo == "Próximo")</p>
+            }
+
+            <a asp-action="Details" asp-controller="PortalClienteMVC" asp-route-id="@caso.CasoId"
+               class="btn btn-outline-primary btn-sm">Ver detalles</a>
+        </div>
+    </div>
+}

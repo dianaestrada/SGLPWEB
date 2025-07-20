@@ -1,0 +1,91 @@
+﻿@model SGLPWEB.Models.ViewModels.DashboardClienteViewModel
+
+@{
+    ViewData["Title"] = "Mi Panel Jurídico";
+}
+
+<h2>📊 Panel Legal del Cliente</h2>
+<p class="text-muted">Resumen de tu actividad legal actual</p>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-header">Casos vinculados</div>
+            <div class="card-body">
+                <p>Total: @Model.TotalCasos</p>
+                <p>Activos: @Model.CasosActivos</p>
+                <p>Finalizados: @Model.CasosFinalizados</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-header">Tareas y Plazos</div>
+            <div class="card-body">
+                <p>Tareas pendientes: @Model.TareasPendientes</p>
+                <p>Plazos próximos: @Model.PlazosProximos</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card text-white bg-secondary mb-3">
+            <div class="card-header">Actividad reciente</div>
+            <div class="card-body">
+                <p>Último caso: @Model.UltimoCaso?.TipoCaso ?? "Sin registros"</p>
+                <p>Última evidencia: @Model.UltimaEvidencia?.NombreArchivo ?? "Sin documentos"</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a asp-action="Index" class="btn btn-outline-dark">
+        ⬅ Ver mis casos
+    </a>
+</div>
+
+<div class="mt-5">
+    <h4 class="fw-bold">📎 Evidencias más recientes</h4>
+
+    @if (Model.Evidencias != null && Model.Evidencias.Any())
+
+    {
+        <table class="table table-bordered table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Archivo</th>
+                    <th>Fecha de carga</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var evidencia in Model.Evidencias.OrderByDescending(e => e.FechaSubida).Take(5))
+
+                {
+                    <tr>
+                        <td>@evidencia.EvidenciaId</td>
+                        <td>@evidencia.NombreArchivo</td>
+                        <td>@evidencia.FechaSubida.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            <a asp-controller="Evidencias" asp-action="Descargar" asp-route-id="@evidencia.EvidenciaId" class="btn btn-sm btn-outline-primary">
+                                🔽 Descargar
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    else
+
+    {
+        <div class="alert alert-info">
+            No hay evidencias registradas aún para tus casos.
+        </div>
+    }
+    <a asp-controller="Login" asp-action="Logout" class="btn btn-outline-danger mt-4">Cerrar sesión</a>
+</div>

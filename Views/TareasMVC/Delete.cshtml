@@ -1,0 +1,36 @@
+﻿@model SGLPWEB.Models.Tarea
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<dl class="row">
+    <dt class="col-sm-3">Responsable:</dt>
+    <dd class="col-sm-9">@Model.Responsable?.Nombre (@Model.Responsable?.Rol?.Nombre)</dd>
+
+    <dt class="col-sm-3">Descripción:</dt>
+    <dd class="col-sm-9">@Model.Descripcion</dd>
+
+    <dt class="col-sm-3">Caso:</dt>
+    <dd class="col-sm-9">@Model.Caso?.TipoCaso</dd>
+
+    <dt class="col-sm-3">Prioridad:</dt>
+    <dd class="col-sm-9">@Model.Prioridad</dd>
+
+    <dt class="col-sm-3">Estado:</dt>
+    <dd class="col-sm-9">@Model.Estado</dd>
+
+    <dt class="col-sm-3">Fecha límite:</dt>
+    <dd class="col-sm-9">@Model.FechaLimite?.ToString("dd/MM/yyyy HH:mm")</dd>
+</dl>
+
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="TareaId" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

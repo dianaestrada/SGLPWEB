@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Panel principal";
+
+
+
+    var nombre = ViewBag.Nombre as string;
+
+    var rol = ViewBag.Rol as string;
+}
+
+<div class="container mt-4">
+    <h3 class="mb-3">👋 Bienvenido, @nombre</h3>
+    <p><strong>Rol:</strong> @rol</p>
+
+    <hr />
+
+    <h4>Módulos disponibles</h4>
+    <div class="row">
+        <div class="col-md-3 mb-3">
+            <a asp-controller="CasosMVC" asp-action="Index" class="btn btn-outline-primary w-100">Casos</a>
+        </div>
+        <div class="col-md-3 mb-3">
+            <a asp-controller="TareasMVC" asp-action="Index" class="btn btn-outline-primary w-100">Tareas</a>
+        </div>
+        <div class="col-md-3 mb-3">
+            <a asp-controller="EvidenciasMVC" asp-action="Index" class="btn btn-outline-primary w-100">Evidencias</a>
+        </div>
+        <div class="col-md-3 mb-3">
+            <a asp-controller="PlazosMVC" asp-action="Index" class="btn btn-outline-primary w-100">Plazos</a>
+        </div>
+
+        @if (rol == "Administrador" || rol == "Empleado")
+
+        {
+            <div class="col-md-3 mb-3">
+                <a asp-controller="ClientesMVC" asp-action="Index" class="btn btn-outline-dark w-100">Clientes</a>
+            </div>
+        }
+    </div>
+
+    <a asp-controller="Login" asp-action="Logout" class="btn btn-outline-danger mt-4">Cerrar sesión</a>
+</div>

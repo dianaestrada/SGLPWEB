@@ -1,0 +1,68 @@
+﻿@model IEnumerable<SGLPWEB.Models.Plazo>
+
+@{
+    ViewData["Title"] = "Index";
+
+    var rol = Context.Session.GetString("Rol");
+}
+
+<h1>Plazos</h1>
+
+@if (rol == "Administrador" || rol == "Empleado")
+
+{
+    <a asp-action="Create" class="btn btn-success mb-3">Crear nuevo</a>
+}
+
+@if (Model.Any(p => p.EstadoPlazo == "Próximo"))
+
+{
+    <div class="alert alert-warning">
+        🔔 Hay @Model.Count(p => p.EstadoPlazo == "Próximo") eventos que ocurren en los próximos días. ¡Prepárate!
+    </div>
+}
+<table class="table table-bordered table-striped">
+    <thead class="table-light">
+        <tr>
+            <th>Fecha Evento</th>
+            <th>Tipo Evento</th>
+            <th>Descripción</th>
+            <th>Caso</th>
+            <th>Estado</th> 
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+
+        {
+            <tr>
+                <td>@item.FechaEvento.ToString("dd/MM/yyyy")</td>
+                <td>@item.TipoEvento</td>
+                <td>@item.Descripcion</td>
+                <td>@item.Caso?.TipoCaso</td>
+                <td>
+                    <span class="badge @(item.EstadoPlazo == "Vencido" ? "bg-danger" : item.EstadoPlazo == "Próximo" ? "bg-warning text-dark" : "bg-success")">
+                        @item.EstadoPlazo
+                    </span>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.PlazoId" class="btn btn-sm btn-outline-info">Ver</a>
+
+                    @if (rol == "Administrador" || rol == "Empleado")
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.PlazoId" class="btn btn-sm btn-outline-warning">Editar</a>
+                    }
+
+                    @if (rol == "Administrador")
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.PlazoId" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a asp-controller="Home" asp-action="Dashboard" class="btn btn-outline-primary">
+    🏠 Volver al panel principal
+</a>
